@@ -84,8 +84,9 @@ class Product:
 
         # Boton
 
-        ttk.Button(frame, text = 'Registrar', command = self.add_product).grid(row = 15 , column = 1, columnspan = 2, sticky = W + E)
+        ttk.Button(frame, text = 'Registrar', command = self.add_product).grid(row = 15 , column = 0, columnspan = 3, sticky = W + E)
 
+        ttk.Button(frame, text = 'Exportar CSV', command = self.exportar).grid(row = 15, column = 2, columnspan = 3, sticky = W + E)
         # Output mensaje
         self.message = Label(text = '', fg = 'red')
         self.message.grid(row = 16, column = 0, columnspan = 2, sticky = W + E)
@@ -254,6 +255,13 @@ class Product:
         self.edit_wind.destroy()
         self.message['text'] = 'Registro {} actualizado exitosamente'.format(self.tree.item(self.tree.selection())['text'])
         self.get_product()
+
+    def exportar(self):
+        import pandas as pd
+        conn = sqlite3.connect(self.dbName)
+        df = pd.read_sql_query('SELECT * FROM Registros', conn)
+        df.to_csv('registro.csv')
+        conn.close()
 
 #https://www.youtube.com/watch?v=W2kAF9pKPPE
 
